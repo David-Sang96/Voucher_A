@@ -15,6 +15,7 @@ const Voucher = () => {
         <ActionButton
           name=" Create Sale "
           icon={<TbFilterCancel className="text-lg" />}
+          to="/voucher"
         />
       </div>
       <VoucherTable />

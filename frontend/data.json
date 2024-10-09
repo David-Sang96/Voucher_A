@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Wireless Headphones",
+      "price": 59.99,
+      "createdAt": "2024-10-08T10:15:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Gaming Mouse",
+      "price": 34.95,
+      "createdAt": "2024-10-06T09:30:00Z"
+    },
+    {
+      "id": 6,
+      "name": "Smartwatch",
+      "price": 199.99,
+      "createdAt": "2024-10-03T11:00:00Z"
+    },
+    {
+      "id": 7,
+      "name": "Portable Charger",
+      "price": 24.99,
+      "createdAt": "2024-10-02T15:30:00Z"
+    },
+    {
+      "id": 8,
+      "name": "Webcam",
+      "price": 49.95,
+      "createdAt": "2024-10-01T08:00:00Z"
+    },
+    {
+      "name": "qwer 3000 to 4000",
+      "price": "4000",
+      "createdAt": "2024-10-09T08:21:37.909Z",
+      "updatedAt": "2024-10-09T08:45:24.734Z",
+      "id": 9
+    },
+    {
+      "name": "userOne edit",
+      "price": "3000",
+      "createdAt": "2024-10-09T08:21:50.933Z",
+      "updatedAt": "2024-10-09T08:51:20.381Z",
+      "id": 10
+    },
+    {
+      "name": "new test",
+      "price": "5000",
+      "createdAt": "2024-10-09T08:51:30.565Z",
+      "id": 11
+    }
+  ]
+}
