@@ -1,11 +1,52 @@
 import { format } from "date-fns";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { ImSpinner3 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
-import { RiEditLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import useSWR, { useSWRConfig } from "swr";
+import axiosInstance from "../ultis/axios";
+import TableSkeleton from "./TableSkeleton";
+
+interface VoucherType {
+  name: string;
+  id: number;
+  voucher_id: number;
+  sale_date: string;
+  updatedAt: string;
+  email: string;
+  isLoading: boolean;
+}
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const VoucherTable = () => {
-  // Tracks the visibility of the menu
-  const date = new Date(Date.now());
+  const [deletingProductId, setDeletingProduct] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { data: vouchers, isLoading } = useSWR<VoucherType[]>(
+    `${import.meta.env.VITE_API_URL}/vouchers`,
+    fetcher,
+  );
+
+  const { mutate } = useSWRConfig();
+
+  const handleDelete = async (id: number, name: string) => {
+    try {
+      setIsDeleting(true);
+      setDeletingProduct(id);
+      await axiosInstance.delete(`/vouchers/${id}`);
+      mutate(`${import.meta.env.VITE_API_URL}/vouchers`);
+      toast.success(`${name} deleted`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Unknown error occur");
+      }
+    } finally {
+      setDeletingProduct(null);
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div className="relative overflow-x-auto overflow-y-hidden shadow-md sm:rounded-lg">
@@ -13,10 +54,10 @@ const VoucherTable = () => {
         <thead className="bg-gray-200 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">
-              voucher id.
+              # voucher id
             </th>
             <th scope="col" className="px-6 py-3">
-              names
+              customer name
             </th>
             <th scope="col" className="px-6 py-3">
               <div className="text-center">email</div>
@@ -25,34 +66,54 @@ const VoucherTable = () => {
               <div className="text-center">Date</div>
             </th>
             <th scope="col" className="px-6 py-3">
-              <div className="text-end">Actions</div>
+              <div className="text-end">Action</div>
             </th>
           </tr>
         </thead>
-        <tbody>
+        {vouchers?.length === 0 && (
           <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-            <td className="px-6 py-4">#14124</td>
-            <th
-              scope="row"
-              className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-            >
-              David Sang
-            </th>
-            <td className="px-6 py-4 text-end">luainawl@gmail.com</td>
-            <td className="px-6 py-4 text-end">
-              {format(date, "d MMM yyyy - h:mm a")}
-            </td>
-            <td className="flex justify-end gap-4 px-6 py-4">
-              <Link to={""} className="text-blue-500">
-                <RiEditLine className="text-xl" />
-              </Link>
-
-              <Link to={""} className="text-red-500">
-                <MdDelete className="text-xl" />
-              </Link>
+            <td className="px-6 py-4 text-center font-semibold" colSpan={5}>
+              No Vouchers
             </td>
           </tr>
-        </tbody>
+        )}
+
+        {isLoading ? (
+          <TableSkeleton />
+        ) : (
+          <tbody>
+            {vouchers?.map((voucher) => (
+              <tr
+                className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
+                key={voucher.id}
+              >
+                <td className="px-6 py-4">{voucher.voucher_id}</td>
+                <th
+                  scope="row"
+                  className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+                >
+                  {voucher.name}
+                </th>
+                <td className="px-6 py-4 text-center">{voucher.email}</td>
+                <td className="px-6 py-4 text-center">
+                  {format(voucher.sale_date, "d MMM yyyy - h:mm a")}
+                </td>
+                <td className="flex justify-end gap-6 px-6 py-4">
+                  <button
+                    className="cursor-pointer text-red-500"
+                    onClick={() => handleDelete(voucher.id, voucher.name)}
+                  >
+                    {deletingProductId === voucher.id && isDeleting ? (
+                      <ImSpinner3 className="size-4 animate-spin" />
+                    ) : (
+                      <MdDelete className="text-xl" />
+                    )}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
     </div>
   );

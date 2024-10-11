@@ -1,4 +1,4 @@
-const SkeletonLoader = () => {
+const TableSkeleton = () => {
   return (
     <tbody>
       {Array.from({ length: 6 }).map((_, index) => (
@@ -28,4 +28,4 @@ const SkeletonLoader = () => {
   );
 };
 
-export default SkeletonLoader;
+export default TableSkeleton;

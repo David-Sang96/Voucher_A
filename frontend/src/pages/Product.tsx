@@ -18,8 +18,8 @@ const Product = () => {
 
   return (
     <section>
-      <Breadcrumb currentPageTitle="products" />
-      <div className="mb-3 mt-5 flex items-center justify-between">
+      <Breadcrumb currentPageTitle="Products" />
+      <div className="mb-3 flex items-center justify-between">
         <ProductSearch />
         <div className="flex items-center gap-3">
           <Filter />

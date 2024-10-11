@@ -20,3 +20,7 @@
 .fade-exit-active {
   transition: opacity 500ms;
 }
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  cursor: pointer; /* Ensure the input is still clickable */
+}

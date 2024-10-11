@@ -7,7 +7,7 @@ import { RiEditLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { useSWRConfig } from "swr";
 import axiosInstance from "../ultis/axios";
-import SkeletonLoader from "./TableSkeleton";
+import TableSkeleton from "./TableSkeleton";
 
 interface Props {
   products: {
@@ -64,7 +64,7 @@ const ProductTable = ({ products, isLoading }: Props) => {
           </tr>
         )}
         {isLoading ? (
-          <SkeletonLoader />
+          <TableSkeleton />
         ) : (
           <tbody>
             {products?.map((product) => (
