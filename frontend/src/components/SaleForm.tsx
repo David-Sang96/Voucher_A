@@ -49,12 +49,11 @@ const SaleForm = () => {
     reset();
   };
 
-  if (isLoading)
-    return <p className="font-semibold text-blue-300">Loading...</p>;
+  if (isLoading) return <p className="font-semibold">Loading...</p>;
 
   return (
     <form
-      className="mt-5 rounded-md p-2 shadow-md"
+      className="rounded-md p-2 shadow-md"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="grid grid-cols-5 gap-3">

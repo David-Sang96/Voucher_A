@@ -21,7 +21,7 @@ const SaleTable = () => {
   };
 
   return (
-    <div className="relative mt-6 overflow-x-auto overflow-y-hidden shadow-md sm:rounded-lg">
+    <div className="relative mt-4 overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
         <thead className="bg-gray-200 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -54,7 +54,7 @@ const SaleTable = () => {
                   scope="row"
                   className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
                 >
-                  {product.name?.slice(0, 18)}..
+                  {product.name?.slice(0, 15)}..
                 </th>
                 <td className="px-6 py-4">{product.price}</td>
                 <td
@@ -74,7 +74,7 @@ const SaleTable = () => {
                     <span className="mx-4">{product.quantity}</span>
                     {hoveredProductId === product.id && (
                       <button
-                        className="absolute right-20 rounded bg-gray-200 px-2 py-1"
+                        className="absolute right-10 rounded bg-gray-200 px-2 py-1"
                         onClick={() => addQuantity(product.id, 1)}
                       >
                         +

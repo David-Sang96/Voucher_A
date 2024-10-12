@@ -71,10 +71,18 @@ const VoucherInfo = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)} id="infoForm">
-        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <div className="mb-3">
+    <div className="grid grid-cols-4 gap-4 pb-6">
+      <div className="col-span-3">
+        <SaleForm />
+        <SaleTable />
+      </div>
+      <div className="col-span-1 flex flex-col justify-between">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          id="infoForm"
+          className="mb-7 space-y-3"
+        >
+          <div>
             <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               Voucher ID
             </label>
@@ -92,7 +100,7 @@ const VoucherInfo = () => {
               </span>
             )}
           </div>
-          <div className="mb-3">
+          <div>
             <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               Customer Name
             </label>
@@ -109,7 +117,7 @@ const VoucherInfo = () => {
               </span>
             )}
           </div>
-          <div className="mb-3">
+          <div>
             <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               Customer Email
             </label>
@@ -126,7 +134,7 @@ const VoucherInfo = () => {
               </span>
             )}
           </div>
-          <div className="mb-3">
+          <div>
             <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
               Sale Date & Time
             </label>
@@ -144,57 +152,54 @@ const VoucherInfo = () => {
               </span>
             )}
           </div>
-        </div>
-      </form>
-      <SaleForm />
-      <SaleTable />
-
-      <div className="mt-4 flex flex-col items-end justify-end gap-2">
-        <div>
-          <input
-            id="go_to_voucher"
-            type="checkbox"
-            defaultValue=""
-            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-            {...register("go_to_voucher")}
-          />
-          <label
-            htmlFor="go_to_voucher"
-            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            Go to voucher detail
-          </label>
-        </div>
-        <div>
-          <input
-            id="is_correct"
-            form="infoForm"
-            required
-            type="checkbox"
-            defaultValue=""
-            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
-            {...register("is_correct", { required: true })}
-          />
-          <label
-            htmlFor="is_correct"
-            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            Fields already fill up
-          </label>
-        </div>
-        <div>
-          <button
-            type="submit"
-            form="infoForm"
-            className={`w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:inline-flex sm:w-auto sm:items-center sm:gap-1 ${isLoading && "cursor-not-allowed bg-blue-400 hover:bg-blue-400"}`}
-            disabled={isLoading}
-          >
-            <span> Confirm Voucher </span>
-            {isLoading && <ImSpinner3 className="size-4 animate-spin" />}
-          </button>
+        </form>
+        <div className="mt-4 flex flex-col items-end justify-end gap-2">
+          <div>
+            <input
+              id="go_to_voucher"
+              type="checkbox"
+              defaultValue=""
+              className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+              {...register("go_to_voucher")}
+            />
+            <label
+              htmlFor="go_to_voucher"
+              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              Go to voucher detail
+            </label>
+          </div>
+          <div>
+            <input
+              id="is_correct"
+              form="infoForm"
+              required
+              type="checkbox"
+              defaultValue=""
+              className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+              {...register("is_correct", { required: true })}
+            />
+            <label
+              htmlFor="is_correct"
+              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            >
+              Fields already fill up
+            </label>
+          </div>
+          <div>
+            <button
+              type="submit"
+              form="infoForm"
+              className={`w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:inline-flex sm:w-auto sm:items-center sm:gap-1 ${isLoading && "cursor-not-allowed bg-blue-400 hover:bg-blue-400"}`}
+              disabled={isLoading}
+            >
+              <span> Confirm Voucher </span>
+              {isLoading && <ImSpinner3 className="size-4 animate-spin" />}
+            </button>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

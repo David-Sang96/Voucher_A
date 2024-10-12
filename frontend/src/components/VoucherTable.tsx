@@ -5,29 +5,25 @@ import { ImSpinner3 } from "react-icons/im";
 import { LuArrowRightToLine } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
-import useSWR, { useSWRConfig } from "swr";
+import { useSWRConfig } from "swr";
 import axiosInstance from "../ultis/axios";
 import TableSkeleton from "./TableSkeleton";
 
 interface VoucherType {
-  name: string;
-  id: number;
-  voucher_id: number;
-  sale_date: string;
-  updatedAt: string;
-  email: string;
+  vouchers: {
+    name: string;
+    id: number;
+    voucher_id: number;
+    sale_date: string;
+    updatedAt: string;
+    email: string;
+  }[];
   isLoading: boolean;
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-const VoucherTable = () => {
+const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
   const [deletingProductId, setDeletingProduct] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const { data: vouchers, isLoading } = useSWR<VoucherType[]>(
-    `${import.meta.env.VITE_API_URL}/vouchers`,
-    fetcher,
-  );
 
   const { mutate } = useSWRConfig();
 
