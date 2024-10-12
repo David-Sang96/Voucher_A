@@ -2,7 +2,9 @@ import { format } from "date-fns";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { ImSpinner3 } from "react-icons/im";
+import { LuArrowRightToLine } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
+import { Link } from "react-router-dom";
 import useSWR, { useSWRConfig } from "swr";
 import axiosInstance from "../ultis/axios";
 import TableSkeleton from "./TableSkeleton";
@@ -98,7 +100,7 @@ const VoucherTable = () => {
                 <td className="px-6 py-4 text-center">
                   {format(voucher.sale_date, "d MMM yyyy - h:mm a")}
                 </td>
-                <td className="flex justify-end gap-6 px-6 py-4">
+                <td className="flex justify-end gap-3 px-6 py-4">
                   <button
                     className="cursor-pointer text-red-500"
                     onClick={() => handleDelete(voucher.id, voucher.name)}
@@ -109,6 +111,9 @@ const VoucherTable = () => {
                       <MdDelete className="text-xl" />
                     )}
                   </button>
+                  <Link to={`/voucher/${voucher.id}`} className="text-blue-500">
+                    <LuArrowRightToLine className="text-xl" />
+                  </Link>
                 </td>
               </tr>
             ))}

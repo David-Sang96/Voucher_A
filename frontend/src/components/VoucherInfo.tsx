@@ -14,12 +14,14 @@ import SaleForm from "./SaleForm";
 import SaleTable from "./SaleTable";
 
 interface IFormInput {
+  id: number;
   voucher_id: number;
   name: string;
   email: string;
   is_correct: boolean;
   sale_date: string;
   createdAt: string;
+  go_to_voucher: boolean;
 }
 
 const VoucherInfo = () => {
@@ -41,7 +43,7 @@ const VoucherInfo = () => {
     const netTotal = total + tax;
     try {
       setIsLoading(true);
-      await axiosInstance.post("/vouchers", {
+      const newVoucher = await axiosInstance.post("/vouchers", {
         voucher_id: data.voucher_id,
         name: data.name,
         email: data.email,
@@ -52,10 +54,11 @@ const VoucherInfo = () => {
         netTotal,
         createdAt: data.createdAt,
       });
+
       resetRecords();
       reset();
       toast.success("Voucher created");
-      navigate("/voucher");
+      if (data.go_to_voucher) navigate(`/voucher/${newVoucher.data.id}`);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -146,7 +149,22 @@ const VoucherInfo = () => {
       <SaleForm />
       <SaleTable />
 
-      <div className="mt-4 flex items-center justify-end gap-3">
+      <div className="mt-4 flex flex-col items-end justify-end gap-2">
+        <div>
+          <input
+            id="go_to_voucher"
+            type="checkbox"
+            defaultValue=""
+            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+            {...register("go_to_voucher")}
+          />
+          <label
+            htmlFor="go_to_voucher"
+            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >
+            Go to voucher detail
+          </label>
+        </div>
         <div>
           <input
             id="is_correct"

@@ -73,5 +73,51 @@
       "createdAt": "2024-10-09T14:00:00Z"
     }
   ],
-  "vouchers": []
+  "vouchers": [
+    {
+      "voucher_id": "INV-20241012-9944",
+      "name": "David Sang",
+      "email": "luainawl@gmail.com",
+      "sale_date": "2024-10-12T05:34:00Z",
+      "records": [
+        {
+          "id": 1,
+          "name": "SEO Optimization Service",
+          "price": 59.99,
+          "quantity": "3",
+          "cost": 179.97,
+          "createdAt": "2024-10-12T05:34:23Z"
+        },
+        {
+          "id": 6,
+          "name": "E-commerce Setup",
+          "price": 199.99,
+          "quantity": "6",
+          "cost": 1199.94,
+          "createdAt": "2024-10-12T05:34:28Z"
+        },
+        {
+          "id": 11,
+          "name": "JavaScript Development Service",
+          "price": 99.99,
+          "quantity": "8",
+          "cost": 799.92,
+          "createdAt": "2024-10-12T05:34:31Z"
+        },
+        {
+          "id": 2,
+          "name": "UI/UX Design Consultation",
+          "price": 12.99,
+          "quantity": "7",
+          "cost": 90.93,
+          "createdAt": "2024-10-12T05:34:37Z"
+        }
+      ],
+      "total": 2270.7599999999998,
+      "tax": 113.538,
+      "netTotal": 2384.298,
+      "createdAt": "2024-10-12T05:34:40Z",
+      "id": 1
+    }
+  ]
 }
