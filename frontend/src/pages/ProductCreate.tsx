@@ -4,10 +4,9 @@ import toast from "react-hot-toast";
 import { ImSpinner3 } from "react-icons/im";
 import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../components/Breadcrumb";
-import axiosInstance from "../ultis/axios";
 
 interface IFormInput {
-  name: string;
+  product_name: string;
   price: number;
   isCorrect: boolean;
   id: number;
@@ -27,17 +26,22 @@ const ProductCreate = () => {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       setIsLoading(true);
-      await axiosInstance.post("/products", {
-        name: data.name,
-        price: data.price,
-        createdAt: new Date().toISOString(),
+      await fetch(`${import.meta.env.VITE_API_URL}/products`, {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.product_name,
+          price: data.price,
+        }),
       });
 
       if (data.backToProductLists) {
         navigate("/products");
       }
       reset();
-      toast.success("Product created");
+      toast.success("created successfully");
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -71,25 +75,25 @@ const ProductCreate = () => {
             </label>
             <input
               type="text"
-              className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${errors.name && "border-red-500 focus:border-red-500 focus:ring-red-500"}`}
+              className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${errors.product_name && "border-red-500 focus:border-red-500 focus:ring-red-500"}`}
               placeholder="name..."
-              {...register("name", {
+              {...register("product_name", {
                 required: true,
                 maxLength: 20,
                 minLength: 3,
               })}
             />
-            {errors.name?.type === "required" && (
+            {errors.product_name?.type === "required" && (
               <span className="text-xs font-bold text-red-500">
                 Name is required
               </span>
             )}
-            {errors.name?.type === "maxLength" && (
+            {errors.product_name?.type === "maxLength" && (
               <span className="text-xs font-bold text-red-500">
                 Not more than 20 characters
               </span>
             )}
-            {errors.name?.type === "minLength" && (
+            {errors.product_name?.type === "minLength" && (
               <span className="text-xs font-bold text-red-500">
                 Not less than 3 characters
               </span>

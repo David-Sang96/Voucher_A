@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 import { ImSpinner3 } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import useSaleRecordStore from "../store/useSaleRecordStore";
-import axiosInstance from "../ultis/axios";
 import {
   currentDateTime,
   generateInvoiceNumber,
@@ -16,11 +15,10 @@ import SaleTable from "./SaleTable";
 interface IFormInput {
   id: number;
   voucher_id: number;
-  name: string;
-  email: string;
+  customer_name: string;
+  customer_email: string;
   is_correct: boolean;
   sale_date: string;
-  createdAt: string;
   go_to_voucher: boolean;
 }
 
@@ -37,28 +35,45 @@ const VoucherInfo = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     data.sale_date = getUTCTime(data.sale_date);
-    data.createdAt = getUTCTime();
+
     const total = records.reduce((a, c) => a + c.cost, 0);
     const tax = total * 0.05;
-    const netTotal = total + tax;
+    const net_total = total + tax;
     try {
       setIsLoading(true);
-      const newVoucher = await axiosInstance.post("/vouchers", {
-        voucher_id: data.voucher_id,
-        name: data.name,
-        email: data.email,
-        sale_date: data.sale_date,
-        records,
-        total,
-        tax,
-        netTotal,
-        createdAt: data.createdAt,
-      });
+      const newVoucher = await fetch(
+        `${import.meta.env.VITE_API_URL}/vouchers`,
+        {
+          method: "post",
+          headers: {
+            "content-type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            voucher_id: data.voucher_id,
+            customer_name: data.customer_name,
+            customer_email: data.customer_email,
+            sale_date: data.sale_date,
+            records,
+            total,
+            tax,
+            net_total,
+          }),
+        },
+      );
 
-      resetRecords();
-      reset();
-      toast.success("Voucher created");
-      if (data.go_to_voucher) navigate(`/voucher/${newVoucher.data.id}`);
+      const resData = await newVoucher.json();
+
+      if (newVoucher.status === 422) {
+        toast.error(resData.message);
+      }
+
+      if (newVoucher.status === 201) {
+        toast.success(resData.message);
+        resetRecords();
+        reset();
+      }
+      if (data.go_to_voucher) navigate(`/voucher/${resData.voucher.id}`);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -69,6 +84,8 @@ const VoucherInfo = () => {
       setIsLoading(false);
     }
   };
+
+  // if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className="grid grid-cols-4 gap-4 pb-6">
@@ -106,12 +123,12 @@ const VoucherInfo = () => {
             </label>
             <input
               type="text"
-              className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${errors.name && "border-red-500 focus:border-red-500 focus:ring-red-500"}`}
-              {...register("name", {
+              className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${errors.customer_name && "border-red-500 focus:border-red-500 focus:ring-red-500"}`}
+              {...register("customer_name", {
                 required: true,
               })}
             />
-            {errors.name?.type === "required" && (
+            {errors.customer_name?.type === "required" && (
               <span className="text-xs font-bold text-red-500">
                 Customer name is required
               </span>
@@ -123,12 +140,12 @@ const VoucherInfo = () => {
             </label>
             <input
               type="email"
-              className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${errors.email && "border-red-500 focus:border-red-500 focus:ring-red-500"}`}
-              {...register("email", {
+              className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${errors.customer_email && "border-red-500 focus:border-red-500 focus:ring-red-500"}`}
+              {...register("customer_email", {
                 required: true,
               })}
             />
-            {errors.email?.type === "required" && (
+            {errors.customer_email?.type === "required" && (
               <span className="text-xs font-bold text-red-500">
                 Customer email is required
               </span>

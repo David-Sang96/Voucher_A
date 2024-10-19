@@ -1,34 +1,26 @@
-import { BsX } from "react-icons/bs";
 import ActionButton from "../components/ActionButton";
 import Breadcrumb from "../components/Breadcrumb";
 import ProductTable from "../components/ProductTable";
 
 import { debounce } from "lodash";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { IoAddSharp, IoSearchOutline } from "react-icons/io5";
 import useSWR from "swr";
 import Filter from "../components/Filter";
+import Pagination from "../components/Pagination";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Product = () => {
-  const [search, setSearch] = useState<string>("");
-  const searchRef = useRef<HTMLInputElement>(null);
-  const { isLoading, data } = useSWR(
-    search
-      ? `${import.meta.env.VITE_API_URL}/products?name_like=${search}`
-      : `${import.meta.env.VITE_API_URL}/products`,
-    fetcher,
+  const [fetchUrl, setFetchUrl] = useState<string | null>(
+    `${import.meta.env.VITE_API_URL}/products`,
   );
 
-  const handleSearch = debounce((e) => setSearch(e.target.value), 500);
+  const { isLoading, data } = useSWR(fetchUrl, fetcher);
 
-  const handleClearSearch = () => {
-    setSearch("");
-    if (searchRef.current) {
-      searchRef.current.value = "";
-    }
-  };
+  const handleSearch = debounce((e) => {
+    setFetchUrl(`${import.meta.env.VITE_API_URL}/products?q=${e.target.value}`);
+  }, 500);
 
   return (
     <section>
@@ -40,22 +32,10 @@ const Product = () => {
           </div>
           <input
             type="text"
-            ref={searchRef}
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-2.5 ps-10 text-sm text-gray-900 focus:border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             placeholder="search product ..."
             onChange={handleSearch}
           />
-          {search && (
-            <button
-              className="absolute inset-y-0 end-2 flex items-center ps-3.5"
-              onClick={handleClearSearch}
-            >
-              <BsX
-                className="scale-100 text-2xl duration-300 active:scale-90"
-                fill="red"
-              />
-            </button>
-          )}
         </div>
         <div className="flex items-center gap-3">
           <Filter />
@@ -66,7 +46,14 @@ const Product = () => {
           />
         </div>
       </div>
-      <ProductTable products={data} isLoading={isLoading} />
+      <ProductTable products={data?.data} isLoading={isLoading} />
+      {!isLoading && (
+        <Pagination
+          links={data?.links}
+          meta={data?.meta}
+          setFetchUrl={setFetchUrl}
+        />
+      )}
     </section>
   );
 };

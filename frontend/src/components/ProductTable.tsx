@@ -6,32 +6,38 @@ import { MdDelete } from "react-icons/md";
 import { RiEditLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { useSWRConfig } from "swr";
-import axiosInstance from "../ultis/axios";
 import TableSkeleton from "./TableSkeleton";
 
-interface Props {
+interface ProductType {
   products: {
-    name: string;
     id: number;
-    createdAt: string;
-    updatedAt: string;
+    product_name: string;
+    created_at: string;
+    updated_at: string;
     price: number;
   }[];
   isLoading: boolean;
 }
 
-const ProductTable = ({ products, isLoading }: Props) => {
+const ProductTable = ({ products, isLoading }: ProductType) => {
   const [deletingProductId, setDeletingProductId] = useState<number | null>(
     null,
   );
   const { mutate } = useSWRConfig();
 
-  const handleDelete = async (id: number, name: string) => {
+  const handleDelete = async (id: number) => {
     setDeletingProductId(id);
-    await axiosInstance.delete(`/products/${id}`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/products/${id}`, {
+      method: "delete",
+    });
+    const data = await res.json();
 
-    mutate(`${import.meta.env.VITE_API_URL}/products`);
-    toast.success(`${name} deleted`);
+    if (res.status === 200) {
+      mutate(`${import.meta.env.VITE_API_URL}/products`);
+      toast.success(`${data.message} `);
+    } else {
+      toast.error(`${data.message} `);
+    }
   };
 
   return (
@@ -50,6 +56,9 @@ const ProductTable = ({ products, isLoading }: Props) => {
             </th>
             <th scope="col" className="px-6 py-3">
               <div className="text-center">Created At</div>
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <div className="text-center">Updated At</div>
             </th>
             <th scope="col" className="px-6 py-3">
               <div className="text-end">Action</div>
@@ -77,15 +86,15 @@ const ProductTable = ({ products, isLoading }: Props) => {
                   scope="row"
                   className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
                 >
-                  {product.name}
+                  {product.product_name}
                 </th>
 
                 <td className="px-6 py-4">{product.price}</td>
                 <td className="px-6 py-4 text-center">
-                  {format(
-                    new Date(product.updatedAt || product.createdAt),
-                    "d MMM yyyy - h:mm a",
-                  )}
+                  {format(new Date(product.created_at), "d MMM yyyy - h:mm a")}
+                </td>
+                <td className="px-6 py-4 text-center">
+                  {format(new Date(product.updated_at), "d MMM yyyy - h:mm a")}
                 </td>
                 <td className="flex justify-end gap-6 px-6 py-4">
                   <Link
@@ -97,7 +106,7 @@ const ProductTable = ({ products, isLoading }: Props) => {
 
                   <button
                     className="cursor-pointer text-red-500"
-                    onClick={() => handleDelete(product.id, product.name)}
+                    onClick={() => handleDelete(product.id)}
                   >
                     {deletingProductId === product.id ? (
                       <ImSpinner3 className="size-4 animate-spin" />

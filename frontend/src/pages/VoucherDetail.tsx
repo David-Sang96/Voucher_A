@@ -22,7 +22,7 @@ const VoucherDetail = () => {
         currentPageTitle="Voucher Details"
         links={[{ title: "Vouchers", path: "/voucher" }]}
       />
-      <VoucherCard {...data} />
+      <VoucherCard {...data?.data} />
     </section>
   );
 };

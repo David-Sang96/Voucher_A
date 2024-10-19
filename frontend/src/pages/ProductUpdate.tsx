@@ -6,10 +6,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import useSWR from "swr";
 import Breadcrumb from "../components/Breadcrumb";
 import UpdateSkeleton from "../components/UpdateSkeleton";
-import axiosInstance from "../ultis/axios";
 
 interface IFormInput {
-  name: string;
+  product_name: string;
   price: number;
   isCorrect: boolean;
   id: number;
@@ -29,7 +28,7 @@ const ProductUpdate = () => {
   } = useForm<IFormInput>();
   const navigate = useNavigate();
 
-  const { data: products, isLoading } = useSWR(
+  const { data: product, isLoading } = useSWR(
     `${import.meta.env.VITE_API_URL}/products/${pid}`,
     fetcher,
   );
@@ -37,18 +36,23 @@ const ProductUpdate = () => {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       setIsUpdating(true);
-      await axiosInstance.put(`/products/${pid}`, {
-        name: data.name,
-        price: data.price,
-        createdAt: products.createdAt,
-        updatedAt: new Date().toISOString(),
+
+      await fetch(`${import.meta.env.VITE_API_URL}/products/${pid}`, {
+        method: "put",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.product_name,
+          price: data.price,
+        }),
       });
 
       if (data.backToProductLists) {
         navigate("/products");
       }
       reset();
-      toast.success("Product updated");
+      toast.success("updated successfully");
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -84,26 +88,26 @@ const ProductUpdate = () => {
             </label>
             <input
               type="text"
-              defaultValue={products.name}
-              className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${errors.name && "border-red-500 focus:border-red-500 focus:ring-red-500"}`}
+              defaultValue={product.data.product_name}
+              className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${errors.product_name && "border-red-500 focus:border-red-500 focus:ring-red-500"}`}
               placeholder="name..."
-              {...register("name", {
+              {...register("product_name", {
                 required: true,
-                maxLength: 20,
+                maxLength: 30,
                 minLength: 3,
               })}
             />
-            {errors.name?.type === "required" && (
+            {errors.product_name?.type === "required" && (
               <span className="text-xs font-bold text-red-500">
                 Name is required
               </span>
             )}
-            {errors.name?.type === "maxLength" && (
+            {errors.product_name?.type === "maxLength" && (
               <span className="text-xs font-bold text-red-500">
-                Not more than 20 characters
+                Not more than 30 characters
               </span>
             )}
-            {errors.name?.type === "minLength" && (
+            {errors.product_name?.type === "minLength" && (
               <span className="text-xs font-bold text-red-500">
                 Not less than 3 characters
               </span>
@@ -118,7 +122,7 @@ const ProductUpdate = () => {
             </label>
             <input
               type="number"
-              defaultValue={products.price}
+              defaultValue={product.data.price}
               className={`block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 ${errors.price && "border-red-500 focus:border-red-500 focus:ring-red-500"}`}
               placeholder="price..."
               {...register("price", { required: true, min: 100, max: 10000 })}

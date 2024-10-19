@@ -1,14 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import useSWR from "swr";
 import useSaleRecordStore from "../store/useSaleRecordStore";
-import axiosInstance from "../ultis/axios";
-import { getUTCTime } from "../ultis/helperFn";
 
 interface ProductType {
-  name: string;
+  product_name: string;
   id: number;
   price: number;
-  createdAt: string;
 }
 
 interface IFormInput {
@@ -18,8 +15,8 @@ interface IFormInput {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const SaleForm = () => {
-  const { data: products, isLoading } = useSWR(
-    `${import.meta.env.VITE_API_URL}/products`,
+  const { data, isLoading } = useSWR(
+    `${import.meta.env.VITE_API_URL}/products?limit=100`,
     fetcher,
   );
   const {
@@ -30,21 +27,30 @@ const SaleForm = () => {
   } = useForm<IFormInput>();
   const { addRecord, records, addQuantity } = useSaleRecordStore();
 
-  const isExisted = records.map((item) => item.id);
+  const isExisted = records.map((item) => item.product_id);
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    if (isExisted.includes(Number(data.id))) {
-      addQuantity(Number(data.id), Number(data.quantity));
+  const onSubmit: SubmitHandler<IFormInput> = async (value) => {
+    if (isExisted.includes(Number(value.id))) {
+      addQuantity(Number(value.id), Number(value.quantity));
       reset();
       return;
     }
 
-    const res = await axiosInstance.get(`/products/${data.id}`);
-    const { id, name, price } = res.data;
-    const createdAt = getUTCTime();
-    const quantity = data.quantity;
-    const cost = quantity * price;
-    const newRecord = { id, name, price, quantity, cost, createdAt };
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/products/${value.id}`,
+    );
+    const { data: product } = await res.json();
+
+    const quantity = value.quantity;
+    const cost = quantity * product.price;
+
+    const newRecord = {
+      product_id: product.id,
+      quantity,
+      cost,
+      product: { price: product.price, product_name: product.product_name },
+      created_at: product.created_at,
+    };
     addRecord(newRecord);
     reset();
   };
@@ -66,9 +72,9 @@ const SaleForm = () => {
             required
             {...register("id")}
           >
-            {products.map((product: ProductType) => (
+            {data?.data?.map((product: ProductType) => (
               <option key={product.id} value={product.id}>
-                {product.name}
+                {product.product_name}
               </option>
             ))}
           </select>

@@ -3,28 +3,38 @@ import html2pdf from "html2pdf.js";
 import printJS from "print-js";
 
 interface VoucherType {
-  name: string;
-  email: string;
-  voucher_id: string;
-  tax: number;
-  total: number;
-  netTotal: number;
+  customer_name: string;
+  id: number;
+  voucher_id: number;
   sale_date: string;
+  updated_at: string;
+  created_at: string;
+  customer_email: string;
+  total: number;
+  tax: number;
+  net_total: number;
   records: {
     id: number;
-    name: string;
-    price: number;
-    quantity: string;
+    voucher_id: string;
+    quantity: number;
     cost: number;
-    createdAt: string;
+    created_at: string;
+    updated_at: string;
+    product: {
+      id: number;
+      product_name: string;
+      created_at: string;
+      updated_at: string;
+      price: number;
+    };
   }[];
 }
 
 const VoucherCard = ({
-  name,
+  customer_name,
   voucher_id,
   sale_date,
-  netTotal,
+  net_total,
   records,
   tax,
   total,
@@ -75,7 +85,7 @@ const VoucherCard = ({
           </div>
           <div>
             <p className="text-end font-semibold">Invoice to</p>
-            {name}
+            {customer_name}
           </div>
         </div>
 
@@ -93,10 +103,10 @@ const VoucherCard = ({
             {records.map((record) => (
               <tr className="border-b text-sm" key={record.id}>
                 <td className="py-2">{record.id}</td>
-                <td className="py-2">{record.name}</td>
+                <td className="py-2">{record.product.product_name}</td>
                 <td className="py-2 text-center">{record.quantity}</td>
-                <td className="py-2 text-right">{record.price}</td>
-                <td className="py-2 text-right">{record.cost.toFixed(2)}</td>
+                <td className="py-2 text-right">{record.product.price}</td>
+                <td className="py-2 text-right">{record.cost}</td>
               </tr>
             ))}
           </tbody>
@@ -106,7 +116,7 @@ const VoucherCard = ({
                 Total
               </td>
               <td className="w-[20%] text-right" colSpan={1}>
-                RM {total.toFixed(2)}
+                RM {total}
               </td>
             </tr>
             <tr className="border-b">
@@ -114,7 +124,7 @@ const VoucherCard = ({
                 Tax
               </td>
               <td className="w-[20%] pe-1 text-right" colSpan={1}>
-                RM {tax.toFixed(2)}
+                RM {tax}
               </td>
             </tr>
             <tr className="border-b">
@@ -122,7 +132,7 @@ const VoucherCard = ({
                 Net-Total
               </td>
               <td className="w-[20%] text-right" colSpan={1}>
-                RM {netTotal.toFixed(2)}
+                RM {net_total}
               </td>
             </tr>
           </tfoot>

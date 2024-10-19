@@ -13,7 +13,7 @@ const SaleTable = () => {
   } = useSaleRecordStore();
   const total = products.reduce((a, c) => a + c.cost, 0);
   const tax = total * 0.05;
-  const netTotal = total + tax;
+  const net_total = total + tax;
 
   const handleDelete = (id: number, name: string) => {
     deleteRecord(id);
@@ -47,35 +47,35 @@ const SaleTable = () => {
         </thead>
         {!!products.length &&
           products.map((product) => (
-            <tbody key={product.id}>
+            <tbody key={product.product_id}>
               <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-                <td className="px-6 py-4">{product.id}</td>
+                <td className="px-6 py-4">{product.product_id}</td>
                 <th
                   scope="row"
                   className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
                 >
-                  {product.name?.slice(0, 15)}..
+                  {product.product.product_name?.slice(0, 15)}..
                 </th>
-                <td className="px-6 py-4">{product.price}</td>
+                <td className="px-6 py-4">{product.product.price}</td>
                 <td
                   className="relative"
-                  onMouseEnter={() => setHoveredProductId(product.id)}
+                  onMouseEnter={() => setHoveredProductId(product.product_id)}
                   onMouseLeave={() => setHoveredProductId(null)}
                 >
                   <div className="flex items-center ps-12">
-                    {hoveredProductId === product.id && (
+                    {hoveredProductId === product.product_id && (
                       <button
                         className="absolute left-5 rounded bg-gray-200 px-2 py-1"
-                        onClick={() => removeQuantity(product.id)}
+                        onClick={() => removeQuantity(product.product_id)}
                       >
                         -
                       </button>
                     )}
                     <span className="mx-4">{product.quantity}</span>
-                    {hoveredProductId === product.id && (
+                    {hoveredProductId === product.product_id && (
                       <button
                         className="absolute right-10 rounded bg-gray-200 px-2 py-1"
-                        onClick={() => addQuantity(product.id, 1)}
+                        onClick={() => addQuantity(product.product_id, 1)}
                       >
                         +
                       </button>
@@ -88,7 +88,12 @@ const SaleTable = () => {
                 <td className="px-12 py-4 text-end">
                   <button
                     className="cursor-pointer text-red-500"
-                    onClick={() => handleDelete(product.id, product.name)}
+                    onClick={() =>
+                      handleDelete(
+                        product.product_id,
+                        product.product.product_name,
+                      )
+                    }
                   >
                     <MdDelete className="text-xl" />
                   </button>
@@ -128,7 +133,7 @@ const SaleTable = () => {
               Net Total (MYR)
             </td>
             <td colSpan={1} className="pe-5 text-end">
-              {netTotal.toFixed(2)}
+              {net_total.toFixed(2)}
             </td>
           </tr>
         </tbody>

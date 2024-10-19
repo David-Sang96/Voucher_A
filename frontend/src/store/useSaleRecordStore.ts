@@ -1,12 +1,14 @@
 import { create } from "zustand";
 
 type Record = {
-  id: number;
-  name: string;
-  price: number;
+  product_id: number;
   quantity: number;
   cost: number;
-  createdAt: string;
+  product: {
+    price: number;
+    product_name: string;
+  };
+  created_at: string;
 };
 
 type SaleRecordState = {
@@ -27,7 +29,7 @@ const useSaleRecordStore = create<SaleRecordState>((set) => ({
 
   deleteRecord: (id) => {
     set((state) => ({
-      records: state.records.filter((item) => item.id !== id),
+      records: state.records.filter((item) => item.product_id !== id),
     }));
   },
 
@@ -38,11 +40,11 @@ const useSaleRecordStore = create<SaleRecordState>((set) => ({
   addQuantity: (id, quantity) => {
     set((state) => ({
       records: state.records.map((record) =>
-        record.id === id
+        record.product_id === id
           ? {
               ...record,
               quantity: Number(record.quantity) + quantity,
-              cost: (Number(record.quantity) + quantity) * record.price,
+              cost: (Number(record.quantity) + quantity) * record.product.price,
             }
           : record,
       ),
@@ -53,11 +55,11 @@ const useSaleRecordStore = create<SaleRecordState>((set) => ({
     set((state) => ({
       records: state.records
         .map((record) =>
-          record.id === id
+          record.product_id === id
             ? {
                 ...record,
                 quantity: record.quantity > 0 ? Number(record.quantity) - 1 : 0,
-                cost: (Number(record.quantity) - 1) * record.price,
+                cost: (Number(record.quantity) - 1) * record.product.price,
               }
             : record,
         )

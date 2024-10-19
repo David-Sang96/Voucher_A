@@ -6,17 +6,20 @@ import { LuArrowRightToLine } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useSWRConfig } from "swr";
-import axiosInstance from "../ultis/axios";
 import TableSkeleton from "./TableSkeleton";
 
 interface VoucherType {
   vouchers: {
-    name: string;
+    customer_name: string;
     id: number;
     voucher_id: number;
     sale_date: string;
-    updatedAt: string;
-    email: string;
+    updated_at: string;
+    created_at: string;
+    customer_email: string;
+    total: number;
+    tax: number;
+    net_total: number;
   }[];
   isLoading: boolean;
 }
@@ -31,7 +34,10 @@ const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
     try {
       setIsDeleting(true);
       setDeletingProduct(id);
-      await axiosInstance.delete(`/vouchers/${id}`);
+      await fetch(`${import.meta.env.VITE_API_URL}/vouchers/${id}`, {
+        method: "delete",
+      });
+
       mutate(`${import.meta.env.VITE_API_URL}/vouchers`);
       toast.success(`${name} deleted`);
     } catch (error: unknown) {
@@ -90,16 +96,20 @@ const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
                   scope="row"
                   className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
                 >
-                  {voucher.name}
+                  {voucher.customer_name}
                 </th>
-                <td className="px-6 py-4 text-center">{voucher.email}</td>
+                <td className="px-6 py-4 text-center">
+                  {voucher.customer_email}
+                </td>
                 <td className="px-6 py-4 text-center">
                   {format(voucher.sale_date, "d MMM yyyy - h:mm a")}
                 </td>
                 <td className="flex justify-end gap-3 px-6 py-4">
                   <button
                     className="cursor-pointer text-red-500"
-                    onClick={() => handleDelete(voucher.id, voucher.name)}
+                    onClick={() =>
+                      handleDelete(voucher.id, voucher.customer_name)
+                    }
                   >
                     {deletingProductId === voucher.id && isDeleting ? (
                       <ImSpinner3 className="size-4 animate-spin" />
