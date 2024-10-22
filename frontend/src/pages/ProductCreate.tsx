@@ -57,7 +57,7 @@ const ProductCreate = () => {
     <section>
       <Breadcrumb
         currentPageTitle="Product Create"
-        links={[{ title: "products", path: "/products" }]}
+        links={[{ title: "products", path: "/dashboard/products" }]}
       />
       <div className="rounded-md p-4 shadow-md md:w-3/5">
         <h1 className="font-semibold md:text-lg">Create New Product</h1>

@@ -44,7 +44,7 @@ const Voucher = () => {
         <ActionButton
           name=" Create Sale "
           icon={<TbFilterCancel className="text-lg" />}
-          to="/sales"
+          to="/dashboard/sales"
         />
       </div>
       <VoucherTable vouchers={data?.data} isLoading={isLoading} />

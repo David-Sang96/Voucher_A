@@ -42,7 +42,7 @@ const Product = () => {
           <ActionButton
             name=" Add new product "
             icon={<IoAddSharp className="text-lg" />}
-            to="/product/create"
+            to="/dashboard/product/create"
           />
         </div>
       </div>

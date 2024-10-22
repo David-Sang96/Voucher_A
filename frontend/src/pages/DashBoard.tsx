@@ -8,15 +8,23 @@ const DashBoard = () => {
     <section>
       <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
         <div className="">
-          <HomeCard name="Products" url="/products" icon={<HiTemplate />} />
+          <HomeCard
+            name="Products"
+            url="/dashboard/products"
+            icon={<HiTemplate />}
+          />
         </div>
         <div className="">
-          <HomeCard name="Sales" url="/sales" icon={<MdPointOfSale />} />
+          <HomeCard
+            name="Sales"
+            url="/dashboard/sales"
+            icon={<MdPointOfSale />}
+          />
         </div>
         <div className="">
           <HomeCard
             name="Vouchers"
-            url="/voucher"
+            url="/dashboard/voucher"
             icon={<LiaFileInvoiceSolid />}
           />
         </div>
