@@ -1,4 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
+import { getCookie } from "react-use-cookie";
 import useSWR from "swr";
 import useSaleRecordStore from "../store/useSaleRecordStore";
 
@@ -13,10 +14,16 @@ interface IFormInput {
   quantity: number;
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const SaleForm = () => {
+  const token = getCookie("token");
+
+  const fetcher = (url: string) =>
+    fetch(url, { headers: { Authorization: `Bearer ${token}` } }).then((res) =>
+      res.json(),
+    );
+
   const { data, isLoading } = useSWR(
-    `${import.meta.env.VITE_API_URL}/products?limit=100`,
+    `${import.meta.env.VITE_AUTH_API_URL}/products?limit=100`,
     fetcher,
   );
   const {
@@ -37,7 +44,8 @@ const SaleForm = () => {
     }
 
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/products/${value.id}`,
+      `${import.meta.env.VITE_AUTH_API_URL}/products/${value.id}`,
+      { headers: { Authorization: `Bearer ${token}` } },
     );
     const { data: product } = await res.json();
 

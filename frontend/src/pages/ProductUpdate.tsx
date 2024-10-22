@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { ImSpinner3 } from "react-icons/im";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import reactUseCookie from "react-use-cookie";
 import useSWR from "swr";
 import Breadcrumb from "../components/Breadcrumb";
 import UpdateSkeleton from "../components/UpdateSkeleton";
@@ -15,8 +16,6 @@ interface IFormInput {
   backToProductLists: string;
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
 const ProductUpdate = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const { pid } = useParams();
@@ -27,9 +26,15 @@ const ProductUpdate = () => {
     reset,
   } = useForm<IFormInput>();
   const navigate = useNavigate();
+  const [token] = reactUseCookie("token");
+
+  const fetcher = (url: string) =>
+    fetch(url, { headers: { Authorization: `Bearer ${token}` } }).then((res) =>
+      res.json(),
+    );
 
   const { data: product, isLoading } = useSWR(
-    `${import.meta.env.VITE_API_URL}/products/${pid}`,
+    `${import.meta.env.VITE_AUTH_API_URL}/products/${pid}`,
     fetcher,
   );
 
@@ -37,19 +42,20 @@ const ProductUpdate = () => {
     try {
       setIsUpdating(true);
 
-      await fetch(`${import.meta.env.VITE_API_URL}/products/${pid}`, {
+      await fetch(`${import.meta.env.VITE_AUTH_API_URL}/products/${pid}`, {
         method: "put",
         headers: {
           "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          name: data.product_name,
+          product_name: data.product_name,
           price: data.price,
         }),
       });
 
       if (data.backToProductLists) {
-        navigate("/products");
+        navigate("/dashboard/products");
       }
       reset();
       toast.success("updated successfully");
@@ -70,7 +76,7 @@ const ProductUpdate = () => {
     <section>
       <Breadcrumb
         currentPageTitle="Product Update"
-        links={[{ title: "products", path: "/products" }]}
+        links={[{ title: "products", path: "/dashboard/products" }]}
       />
       <div className="rounded-md p-4 shadow-md md:w-3/5">
         <h1 className="font-semibold md:text-lg">Update Product</h1>
@@ -175,7 +181,7 @@ const ProductUpdate = () => {
           </div>
 
           <Link
-            to={"/products"}
+            to={"/dashboard/products"}
             className="mb-2 me-2 w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 max-sm:block"
           >
             Cancel

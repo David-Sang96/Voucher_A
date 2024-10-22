@@ -5,6 +5,7 @@ import { ImSpinner3 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
 import { RiEditLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import reactUseCookie from "react-use-cookie";
 import { useSWRConfig } from "swr";
 import TableSkeleton from "./TableSkeleton";
 
@@ -24,16 +25,23 @@ const ProductTable = ({ products, isLoading }: ProductType) => {
     null,
   );
   const { mutate } = useSWRConfig();
+  const [token] = reactUseCookie("token");
 
   const handleDelete = async (id: number) => {
     setDeletingProductId(id);
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/products/${id}`, {
-      method: "delete",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_AUTH_API_URL}/products/${id}`,
+      {
+        method: "delete",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     const data = await res.json();
 
     if (res.status === 200) {
-      mutate(`${import.meta.env.VITE_API_URL}/products`);
+      mutate(`${import.meta.env.VITE_AUTH_API_URL}/products`);
       toast.success(`${data.message} `);
     } else {
       toast.error(`${data.message} `);
@@ -98,7 +106,7 @@ const ProductTable = ({ products, isLoading }: ProductType) => {
                 </td>
                 <td className="flex justify-end gap-6 px-6 py-4">
                   <Link
-                    to={`/product/update/${product.id}`}
+                    to={`/dashboard/product/update/${product.id}`}
                     className="text-blue-500"
                   >
                     <RiEditLine className="text-xl" />

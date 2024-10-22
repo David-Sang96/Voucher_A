@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { ImSpinner3 } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
+import { getCookie } from "react-use-cookie";
 import useSaleRecordStore from "../store/useSaleRecordStore";
 import {
   currentDateTime,
@@ -32,6 +33,7 @@ const VoucherInfo = () => {
   } = useForm<IFormInput>();
   const { records, resetRecords } = useSaleRecordStore();
   const navigate = useNavigate();
+  const token = getCookie("token");
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     data.sale_date = getUTCTime(data.sale_date);
@@ -42,12 +44,13 @@ const VoucherInfo = () => {
     try {
       setIsLoading(true);
       const newVoucher = await fetch(
-        `${import.meta.env.VITE_API_URL}/vouchers`,
+        `${import.meta.env.VITE_AUTH_API_URL}/vouchers`,
         {
           method: "post",
           headers: {
             "content-type": "application/json",
             Accept: "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             voucher_id: data.voucher_id,

@@ -34,11 +34,11 @@ const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
     try {
       setIsDeleting(true);
       setDeletingProduct(id);
-      await fetch(`${import.meta.env.VITE_API_URL}/vouchers/${id}`, {
+      await fetch(`${import.meta.env.VITE_AUTH_API_URL}/vouchers/${id}`, {
         method: "delete",
       });
 
-      mutate(`${import.meta.env.VITE_API_URL}/vouchers`);
+      mutate(`${import.meta.env.VITE_AUTH_API_URL}/vouchers`);
       toast.success(`${name} deleted`);
     } catch (error: unknown) {
       if (error instanceof Error) {

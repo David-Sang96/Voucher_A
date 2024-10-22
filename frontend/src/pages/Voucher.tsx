@@ -12,14 +12,14 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Voucher = () => {
   const [fetchUrl, setFetchUrl] = useState<string | null>(
-    `${import.meta.env.VITE_API_URL}/vouchers`,
+    `${import.meta.env.VITE_AUTH_API_URL}/vouchers`,
   );
   const { data, isLoading } = useSWR(fetchUrl, fetcher);
 
   const handleSearch = debounce(
     (e) =>
       setFetchUrl(
-        `${import.meta.env.VITE_API_URL}/vouchers?q=${e.target.value}`,
+        `${import.meta.env.VITE_AUTH_API_URL}/vouchers?q=${e.target.value}`,
       ),
     500,
   );

@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { ImSpinner3 } from "react-icons/im";
 import { Link, useNavigate } from "react-router-dom";
+import reactUseCookie from "react-use-cookie";
 import Breadcrumb from "../components/Breadcrumb";
 
 interface IFormInput {
@@ -22,23 +23,25 @@ const ProductCreate = () => {
     reset,
   } = useForm<IFormInput>();
   const navigate = useNavigate();
+  const [token] = reactUseCookie("token");
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       setIsLoading(true);
-      await fetch(`${import.meta.env.VITE_API_URL}/products`, {
+      await fetch(`${import.meta.env.VITE_AUTH_API_URL}/products`, {
         method: "post",
         headers: {
           "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          name: data.product_name,
+          product_name: data.product_name,
           price: data.price,
         }),
       });
 
       if (data.backToProductLists) {
-        navigate("/products");
+        navigate("/dashboard/products");
       }
       reset();
       toast.success("created successfully");
@@ -161,7 +164,7 @@ const ProductCreate = () => {
           </div>
 
           <Link
-            to={"/products"}
+            to={"/dashboard/products"}
             className="mb-2 me-2 w-full rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 max-sm:block"
           >
             Cancel

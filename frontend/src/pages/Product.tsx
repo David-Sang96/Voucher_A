@@ -5,21 +5,28 @@ import ProductTable from "../components/ProductTable";
 import { debounce } from "lodash";
 import { useState } from "react";
 import { IoAddSharp, IoSearchOutline } from "react-icons/io5";
+import useCookie from "react-use-cookie";
 import useSWR from "swr";
 import Filter from "../components/Filter";
 import Pagination from "../components/Pagination";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
 const Product = () => {
   const [fetchUrl, setFetchUrl] = useState<string | null>(
-    `${import.meta.env.VITE_API_URL}/products`,
+    `${import.meta.env.VITE_AUTH_API_URL}/products`,
   );
+  const [token] = useCookie("token");
+
+  const fetcher = (url: string) =>
+    fetch(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then((res) => res.json());
 
   const { isLoading, data } = useSWR(fetchUrl, fetcher);
 
   const handleSearch = debounce((e) => {
-    setFetchUrl(`${import.meta.env.VITE_API_URL}/products?q=${e.target.value}`);
+    setFetchUrl(
+      `${import.meta.env.VITE_AUTH_API_URL}/products?q=${e.target.value}`,
+    );
   }, 500);
 
   return (

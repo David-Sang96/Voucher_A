@@ -1,11 +1,16 @@
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "../App";
+import Layout from "../components/Layout";
+import ChangeImage from "../pages/ChangeImage";
+import ChangeName from "../pages/ChangeName";
+import ChangePassword from "../pages/ChangePassword";
 import DashBoard from "../pages/DashBoard";
 import Login from "../pages/Login";
 import NotFound from "../pages/NotFound";
 import Product from "../pages/Product";
 import ProductCreate from "../pages/ProductCreate";
 import ProductUpdate from "../pages/ProductUpdate";
+import Profile from "../pages/Profile";
 import Register from "../pages/Register";
 import Sale from "../pages/Sale";
 import Voucher from "../pages/Voucher";
@@ -28,7 +33,7 @@ const Routers = () => {
         },
         {
           path: "/dashboard",
-          element: <Outlet />,
+          element: <Layout />,
           children: [
             {
               index: true,
@@ -57,6 +62,27 @@ const Routers = () => {
             {
               path: "voucher/:vid",
               element: <VoucherDetail />,
+            },
+            {
+              path: "user-profile",
+              children: [
+                {
+                  index: true,
+                  element: <Profile />,
+                },
+                {
+                  path: "change-name",
+                  element: <ChangeName />,
+                },
+                {
+                  path: "change-image",
+                  element: <ChangeImage />,
+                },
+                {
+                  path: "change-password",
+                  element: <ChangePassword />,
+                },
+              ],
             },
           ],
         },

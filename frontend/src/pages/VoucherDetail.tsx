@@ -8,7 +8,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const VoucherDetail = () => {
   const { vid } = useParams();
   const { data, isLoading, error } = useSWR(
-    `${import.meta.env.VITE_API_URL}/vouchers/${vid}`,
+    `${import.meta.env.VITE_AUTH_API_URL}/vouchers/${vid}`,
     fetcher,
   );
 

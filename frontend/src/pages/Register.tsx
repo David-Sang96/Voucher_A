@@ -1,6 +1,7 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { getCookie } from "react-use-cookie";
 
 interface RegisterType {
   name: string;
@@ -12,6 +13,7 @@ interface RegisterType {
 const Register = () => {
   const { register, handleSubmit, reset } = useForm<RegisterType>();
   const navigate = useNavigate();
+  const token = getCookie("token");
 
   const handleRegister: SubmitHandler<RegisterType> = async (data) => {
     const res = await fetch(`${import.meta.env.VITE_AUTH_API_URL}/register`, {
@@ -27,12 +29,15 @@ const Register = () => {
 
     if (res.status === 200) {
       toast.success("Register successfully");
+
       reset();
       navigate("/");
     } else {
       toast.error(resData.message);
     }
   };
+
+  if (token) return <Navigate to={"/dashboard"} replace />;
 
   return (
     <section>

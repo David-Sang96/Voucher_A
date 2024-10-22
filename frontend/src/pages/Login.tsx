@@ -1,6 +1,7 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import useCookie from "react-use-cookie";
 
 interface LoginType {
   email: string;
@@ -9,6 +10,8 @@ interface LoginType {
 
 const Login = () => {
   const { register, handleSubmit, reset } = useForm<LoginType>();
+  const [userToken, setUserToken] = useCookie("token");
+  const [userCookie, setUserCookie] = useCookie("auth_user");
   const navigate = useNavigate();
 
   const handleLogin: SubmitHandler<LoginType> = async (data) => {
@@ -26,11 +29,23 @@ const Login = () => {
     if (res.status === 200) {
       toast.success("Login successfully");
       reset();
+      setUserToken(resData.token, {
+        path: "/",
+        SameSite: "Strict",
+        days: 1,
+      });
+      setUserCookie(JSON.stringify(resData.user), {
+        path: "/",
+        SameSite: "Strict",
+        days: 1,
+      });
       navigate("/dashboard");
     } else {
       toast.error(resData.message);
     }
   };
+
+  if (userToken || userCookie) return <Navigate to={"/dashboard"} replace />;
 
   return (
     <section>
