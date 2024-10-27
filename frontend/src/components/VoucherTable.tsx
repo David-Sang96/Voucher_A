@@ -1,10 +1,12 @@
 import { format } from "date-fns";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { BiDownArrow, BiUpArrow } from "react-icons/bi";
 import { ImSpinner3 } from "react-icons/im";
 import { LuArrowRightToLine } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { getCookie } from "react-use-cookie";
 import { useSWRConfig } from "swr";
 import TableSkeleton from "./TableSkeleton";
 
@@ -22,11 +24,13 @@ interface VoucherType {
     net_total: number;
   }[];
   isLoading: boolean;
+  sortBy: (val: string) => void;
 }
 
-const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
+const VoucherTable = ({ vouchers, isLoading, sortBy }: VoucherType) => {
   const [deletingProductId, setDeletingProduct] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const token = getCookie("token");
 
   const { mutate } = useSWRConfig();
 
@@ -36,6 +40,9 @@ const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
       setDeletingProduct(id);
       await fetch(`${import.meta.env.VITE_AUTH_API_URL}/vouchers/${id}`, {
         method: "delete",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       });
 
       mutate(`${import.meta.env.VITE_AUTH_API_URL}/vouchers`);
@@ -57,8 +64,21 @@ const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
       <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
         <thead className="bg-gray-200 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
           <tr>
+            <th scope="col" className="flex items-center gap-1 px-6 py-3">
+              <span>
+                <BiUpArrow
+                  className="size-3 cursor-pointer text-blue-500"
+                  onClick={() => sortBy("asc")}
+                />
+                <BiDownArrow
+                  className="size-3 cursor-pointer text-blue-500"
+                  onClick={() => sortBy("desc")}
+                />
+              </span>
+              #
+            </th>
             <th scope="col" className="px-6 py-3">
-              # voucher id
+              voucher id
             </th>
             <th scope="col" className="px-6 py-3">
               customer name
@@ -91,6 +111,7 @@ const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
                 className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
                 key={voucher.id}
               >
+                <td className="px-6 py-4">{voucher.id}</td>
                 <td className="px-6 py-4">{voucher.voucher_id}</td>
                 <th
                   scope="row"
@@ -102,7 +123,8 @@ const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
                   {voucher.customer_email}
                 </td>
                 <td className="px-6 py-4 text-center">
-                  {format(voucher.sale_date, "d MMM yyyy - h:mm a")}
+                  {format(voucher.sale_date, "d MMM yyyy")} -
+                  {format(voucher.created_at, " h:mm a")}
                 </td>
                 <td className="flex justify-end gap-3 px-6 py-4">
                   <button
@@ -117,7 +139,10 @@ const VoucherTable = ({ vouchers, isLoading }: VoucherType) => {
                       <MdDelete className="text-xl" />
                     )}
                   </button>
-                  <Link to={`/voucher/${voucher.id}`} className="text-blue-500">
+                  <Link
+                    to={`/dashboard/voucher/${voucher.id}`}
+                    className="text-blue-500"
+                  >
                     <LuArrowRightToLine className="text-xl" />
                   </Link>
                 </td>

@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { BiDownArrow, BiUpArrow } from "react-icons/bi";
 import { ImSpinner3 } from "react-icons/im";
 import { MdDelete } from "react-icons/md";
 import { RiEditLine } from "react-icons/ri";
@@ -18,9 +19,10 @@ interface ProductType {
     price: number;
   }[];
   isLoading: boolean;
+  sortBy: (val: string) => void;
 }
 
-const ProductTable = ({ products, isLoading }: ProductType) => {
+const ProductTable = ({ products, isLoading, sortBy }: ProductType) => {
   const [deletingProductId, setDeletingProductId] = useState<number | null>(
     null,
   );
@@ -53,7 +55,17 @@ const ProductTable = ({ products, isLoading }: ProductType) => {
       <table className="w-full text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
         <thead className="bg-gray-200 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th scope="col" className="px-6 py-3">
+            <th scope="col" className="flex items-center gap-1 px-6 py-3">
+              <span>
+                <BiUpArrow
+                  className="size-3 cursor-pointer text-blue-500"
+                  onClick={() => sortBy("asc")}
+                />
+                <BiDownArrow
+                  className="size-3 cursor-pointer text-blue-500"
+                  onClick={() => sortBy("desc")}
+                />
+              </span>
               #
             </th>
             <th scope="col" className="px-6 py-3">

@@ -1,9 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import { removeCookie } from "react-use-cookie";
 import useUserStore from "../store/useUserStore";
 
 const Logout = () => {
-  const navigate = useNavigate();
   const { removeUser } = useUserStore();
 
   return (
@@ -14,7 +12,6 @@ const Logout = () => {
         removeCookie("token");
         removeCookie("auth_user");
         removeUser();
-        navigate("/");
       }}
     >
       Log out

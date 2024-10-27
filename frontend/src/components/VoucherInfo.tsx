@@ -5,6 +5,7 @@ import { ImSpinner3 } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "react-use-cookie";
 import useSaleRecordStore from "../store/useSaleRecordStore";
+import useUserStore from "../store/useUserStore";
 import {
   currentDateTime,
   generateInvoiceNumber,
@@ -34,13 +35,14 @@ const VoucherInfo = () => {
   const { records, resetRecords } = useSaleRecordStore();
   const navigate = useNavigate();
   const token = getCookie("token");
+  const { user } = useUserStore();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     data.sale_date = getUTCTime(data.sale_date);
-
     const total = records.reduce((a, c) => a + c.cost, 0);
     const tax = total * 0.05;
     const net_total = total + tax;
+
     try {
       setIsLoading(true);
       const newVoucher = await fetch(
@@ -61,6 +63,7 @@ const VoucherInfo = () => {
             total,
             tax,
             net_total,
+            user_id: user?.id,
           }),
         },
       );
@@ -76,7 +79,7 @@ const VoucherInfo = () => {
         resetRecords();
         reset();
       }
-      if (data.go_to_voucher) navigate(`/voucher/${resData.voucher.id}`);
+      if (data.go_to_voucher) navigate(`/dashboard/voucher/${resData.data.id}`);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);

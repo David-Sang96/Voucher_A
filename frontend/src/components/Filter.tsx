@@ -1,10 +1,24 @@
 import { useState } from "react";
 import { FiFilter } from "react-icons/fi";
 
-const data = ["Dashboard", "hello", "hi", "good", "bad"];
+const data = [
+  "ID (Ascending)",
+  "ID (Descending)",
+  "Price (Low To High)",
+  "Price (High To Low)",
+];
 
-const Filter = () => {
+interface Props {
+  filterByNameAndPrice: (val: string) => void;
+}
+
+const Filter = ({ filterByNameAndPrice }: Props) => {
   const [show, setShow] = useState(false);
+
+  const handleFilter = (val: string) => {
+    filterByNameAndPrice(val);
+    setShow(false);
+  };
 
   return (
     <div className="relative">
@@ -32,12 +46,12 @@ const Filter = () => {
           >
             {data.map((item, i) => (
               <li key={i}>
-                <a
-                  href="#"
+                <button
                   className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                  onClick={() => handleFilter(item)}
                 >
                   {item}
-                </a>
+                </button>
               </li>
             ))}
           </ul>
