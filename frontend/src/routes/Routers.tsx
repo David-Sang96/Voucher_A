@@ -4,8 +4,9 @@ import Layout from "../components/Layout";
 import ChangeImage from "../pages/ChangeImage";
 import ChangeName from "../pages/ChangeName";
 import ChangePassword from "../pages/ChangePassword";
-import DashBoard from "../pages/DashBoard";
-import Login from "../pages/Login";
+
+import DashboardPage from "../features/dashboard/pages/DashboardPage";
+
 import NotFound from "../pages/NotFound";
 import Product from "../pages/Product";
 import ProductCreate from "../pages/ProductCreate";
@@ -25,7 +26,7 @@ const Routers = () => {
       children: [
         {
           index: true,
-          element: <Login />,
+          element: <h1>Hello</h1>,
         },
         {
           path: "/register",
@@ -37,7 +38,7 @@ const Routers = () => {
           children: [
             {
               index: true,
-              element: <DashBoard />,
+              element: <DashboardPage />,
             },
             {
               path: "products",

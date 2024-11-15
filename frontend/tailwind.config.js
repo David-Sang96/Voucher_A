@@ -9,7 +9,11 @@ export default {
     fontFamily: {
       sans: ["Montserrat", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        heading: ["Poppins", "sans-serif"],
+      },
+    },
   },
   plugins: [require("flowbite/plugin")],
 };

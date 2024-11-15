@@ -1,7 +1,7 @@
 import { removeCookie } from "react-use-cookie";
 import useUserStore from "../store/useUserStore";
 
-const Logout = () => {
+const LogoutBtn = () => {
   const { removeUser } = useUserStore();
 
   return (
@@ -19,4 +19,4 @@ const Logout = () => {
   );
 };
 
-export default Logout;
+export default LogoutBtn;

@@ -7,7 +7,7 @@ type Props = {
   url: string;
 };
 
-const HomeCard = ({ name, icon, url }: Props) => {
+const ModuleBtn = ({ name, icon, url }: Props) => {
   return (
     <Link
       to={url}
@@ -19,4 +19,4 @@ const HomeCard = ({ name, icon, url }: Props) => {
   );
 };
 
-export default HomeCard;
+export default ModuleBtn;

@@ -1,5 +1,5 @@
 // import { getCookie } from "react-use-cookie";
-import useUserStore from "../store/useUserStore";
+import useUserStore from "../../../store/useUserStore";
 
 const Header = () => {
   // always fetches the latest value stored in the cookie
