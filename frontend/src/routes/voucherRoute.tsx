@@ -3,8 +3,8 @@ import { lazy } from "react";
 const VoucherHomePage = lazy(
   () => import("../features/voucher/pages/VoucherHomePage"),
 );
-const VoucherUpdatePage = lazy(
-  () => import("../features/voucher/pages/VoucherUpdatePage"),
+const VoucherDetailsPage = lazy(
+  () => import("../features/voucher/pages/VoucherDetailsPage"),
 );
 
 export const voucherRoute = [
@@ -14,6 +14,6 @@ export const voucherRoute = [
   },
   {
     path: "voucher/:vid",
-    element: <VoucherUpdatePage />,
+    element: <VoucherDetailsPage />,
   },
 ];
