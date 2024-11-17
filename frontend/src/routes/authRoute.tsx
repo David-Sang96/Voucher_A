@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
-import Spinner from "../components/Spinner";
+import ProgressBar from "../components/ProgressBar";
 
 const LoginPage = lazy(() => import("../features/auth/pages/LoginPage"));
 const RegisterPage = lazy(() => import("../features/auth/pages/RegisterPage"));
@@ -9,7 +9,7 @@ export const authRoute = [
   {
     path: "login",
     element: (
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<ProgressBar />}>
         <LoginPage />
       </Suspense>
     ),
@@ -17,7 +17,7 @@ export const authRoute = [
   {
     path: "register",
     element: (
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<ProgressBar />}>
         <RegisterPage />
       </Suspense>
     ),

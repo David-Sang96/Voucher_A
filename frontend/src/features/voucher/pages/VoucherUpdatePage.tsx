@@ -1,17 +1,13 @@
 import { useParams } from "react-router-dom";
-import { getCookie } from "react-use-cookie";
 import useSWR from "swr";
-import Breadcrumb from "../components/Breadcrumb";
+
+import Breadcrumb from "../../../components/Breadcrumb";
+import { fetcher } from "../../../services/voucher";
 import VoucherCard from "../components/VoucherCard";
 
-const VoucherDetail = () => {
+const VoucherUpdatePage = () => {
   const { vid } = useParams();
-  const token = getCookie("token");
 
-  const fetcher = (url: string) =>
-    fetch(url, { headers: { Authorization: `Bearer ${token}` } }).then((res) =>
-      res.json(),
-    );
   const { data, isLoading, error } = useSWR(
     `${import.meta.env.VITE_AUTH_API_URL}/vouchers/${vid}`,
     fetcher,
@@ -25,11 +21,11 @@ const VoucherDetail = () => {
     <section>
       <Breadcrumb
         currentPageTitle="Voucher Details"
-        links={[{ title: "Vouchers", path: "/dashboard/voucher" }]}
+        links={[{ title: "Vouchers", path: "/dashboard/vouchers" }]}
       />
       <VoucherCard {...data?.data} />
     </section>
   );
 };
 
-export default VoucherDetail;
+export default VoucherUpdatePage;

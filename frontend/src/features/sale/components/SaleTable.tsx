@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { MdDelete } from "react-icons/md";
-import useSaleRecordStore from "../store/useSaleRecordStore";
+import useSaleRecordStore from "../../../store/useSaleRecordStore";
 
 const SaleTable = () => {
   const [hoveredProductId, setHoveredProductId] = useState<number | null>(null);
@@ -105,7 +105,7 @@ const SaleTable = () => {
           <tbody className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
             <tr>
               <td className="py-3.5 text-center font-semibold" colSpan={6}>
-                There is no record.Buy something
+                There is no record
               </td>
             </tr>
           </tbody>

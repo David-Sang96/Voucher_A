@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import Spinner from "../../../components/Spinner";
+import ProgressBar from "../../../components/ProgressBar";
 import Footer from "./Footer";
 import Header from "./Header";
 
@@ -18,7 +18,7 @@ const PublicLayout = () => {
           classNames={"fade"}
         >
           <div className="flex-1 px-8">
-            <Suspense fallback={<Spinner />}>
+            <Suspense fallback={<ProgressBar />}>
               <Outlet />
             </Suspense>
           </div>

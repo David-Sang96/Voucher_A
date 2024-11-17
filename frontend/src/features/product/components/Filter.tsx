@@ -2,8 +2,8 @@ import { useState } from "react";
 import { FiFilter } from "react-icons/fi";
 
 const data = [
-  "ID (Ascending)",
-  "ID (Descending)",
+  "Name (A To Z)",
+  "Name (Z To A)",
   "Price (Low To High)",
   "Price (High To Low)",
 ];
@@ -14,7 +14,6 @@ interface Props {
 
 const Filter = ({ filterByNameAndPrice }: Props) => {
   const [show, setShow] = useState(false);
-
   const handleFilter = (val: string) => {
     filterByNameAndPrice(val);
     setShow(false);

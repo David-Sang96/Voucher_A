@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { getCookie } from "react-use-cookie";
 import useSWR from "swr";
-import useSaleRecordStore from "../store/useSaleRecordStore";
+import useSaleRecordStore from "../../../store/useSaleRecordStore";
 
 interface ProductType {
   product_name: string;

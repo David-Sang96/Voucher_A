@@ -3,26 +3,22 @@ import { debounce } from "lodash";
 import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { TbFilterCancel } from "react-icons/tb";
-import { useSearchParams } from "react-router-dom";
-import { getCookie } from "react-use-cookie";
+import { useLocation, useSearchParams } from "react-router-dom";
 import useSWR from "swr";
-import ActionButton from "../components/ActionButton";
-import Breadcrumb from "../components/Breadcrumb";
-import Pagination from "../components/Pagination";
+import Breadcrumb from "../../../components/Breadcrumb";
+import CreateBtn from "../../../components/CreateBtn";
+import Pagination from "../../../components/Pagination";
+import { fetcher } from "../../../services/voucher";
+import { sortByCategory } from "../../../ultils/sort";
+import { urlToParamsObject } from "../../../ultils/url";
 import VoucherTable from "../components/VoucherTable";
 
-const Voucher = () => {
+const VoucherHomePage = () => {
+  const location = useLocation();
   const [fetchUrl, setFetchUrl] = useState<string | null>(
-    `${import.meta.env.VITE_AUTH_API_URL}/vouchers`,
+    `${import.meta.env.VITE_AUTH_API_URL}/vouchers${location.search}`,
   );
-  const token = getCookie("token");
-  const [params, setParams] = useSearchParams();
-
-  const fetcher = (url: string) =>
-    fetch(url, { headers: { authorization: `Bearer ${token}` } }).then((res) =>
-      res.json(),
-    );
-
+  const [, setParams] = useSearchParams();
   const { data, isLoading } = useSWR(fetchUrl, fetcher);
 
   const handleSearch = debounce((e) => {
@@ -38,26 +34,13 @@ const Voucher = () => {
   }, 500);
 
   const updateFetchUrl = (url: string | null) => {
-    const currentUrl = new URL(url!);
-    const searchParams = new URLSearchParams(currentUrl.search);
-    const paramsKeys = Object.fromEntries(searchParams.entries());
+    const paramsKeys = urlToParamsObject(url!);
     setParams(paramsKeys);
     setFetchUrl(url);
   };
 
-  const sortById = (val: string) => {
-    if (val === "asc") {
-      setFetchUrl(
-        `${import.meta.env.VITE_AUTH_API_URL}/vouchers?sort_by=id&sort_direction=asc`,
-      );
-      setParams({ sort_by: "id", sort_direction: "asc" });
-    } else {
-      setFetchUrl(
-        `${import.meta.env.VITE_AUTH_API_URL}/vouchers?sort_by=id&sort_direction=desc`,
-      );
-      setParams({ sort_by: "id", sort_direction: "desc" });
-    }
-  };
+  const sort = (val: string) =>
+    sortByCategory(val, "vouchers", setFetchUrl, setParams);
 
   return (
     <section>
@@ -76,26 +59,21 @@ const Voucher = () => {
           />
         </div>
 
-        <ActionButton
+        <CreateBtn
           name=" Create Sale "
           icon={<TbFilterCancel className="text-lg" />}
           to="/dashboard/sales"
         />
       </div>
-      <VoucherTable
-        vouchers={data?.data}
-        isLoading={isLoading}
-        sortBy={sortById}
+      <VoucherTable vouchers={data?.data} isLoading={isLoading} sortBy={sort} />
+
+      <Pagination
+        updateFetchUrl={updateFetchUrl}
+        links={data?.links}
+        meta={data?.meta}
       />
-      {!isLoading && (
-        <Pagination
-          updateFetchUrl={updateFetchUrl}
-          links={data?.links}
-          meta={data?.meta}
-        />
-      )}
     </section>
   );
 };
 
-export default Voucher;
+export default VoucherHomePage;

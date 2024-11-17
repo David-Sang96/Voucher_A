@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type Record = {
+export type Record = {
   product_id: number;
   quantity: number;
   cost: number;

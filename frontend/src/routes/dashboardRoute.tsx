@@ -1,5 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy } from "react";
+import { productRoute } from "./productRoute";
+import { saleRoute } from "./saleRoute";
+import { voucherRoute } from "./voucherRoute";
 
 const DashboardLayout = lazy(
   () => import("../features/dashboard/components/DashboardLayout"),
@@ -17,6 +20,9 @@ export const dashBoardRoute = [
         index: true,
         element: <DashboardPage />,
       },
+      ...productRoute,
+      ...voucherRoute,
+      ...saleRoute,
     ],
   },
 ];

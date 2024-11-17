@@ -7,7 +7,7 @@ type Props = {
   to: string;
 };
 
-const ActionButton = ({ name, icon, to }: Props) => {
+const CreateBtn = ({ name, icon, to }: Props) => {
   return (
     <Link
       to={to}
@@ -18,4 +18,4 @@ const ActionButton = ({ name, icon, to }: Props) => {
   );
 };
 
-export default ActionButton;
+export default CreateBtn;

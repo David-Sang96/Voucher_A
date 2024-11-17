@@ -1,4 +1,5 @@
 // import { getCookie } from "react-use-cookie";
+import { Link } from "react-router-dom";
 import useUserStore from "../../../store/useUserStore";
 
 const Header = () => {
@@ -12,7 +13,9 @@ const Header = () => {
     <header>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold md:text-3xl">Voucher App</h1>
+          <Link to={"/"} className="text-xl font-bold md:text-3xl">
+            Voucher App
+          </Link>
           <p className="font-semibold text-stone-500 max-sm:text-sm">
             Top Reacher
           </p>

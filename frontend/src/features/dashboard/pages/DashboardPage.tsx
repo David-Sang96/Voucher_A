@@ -27,7 +27,7 @@ const DashboardPage = () => {
         <div>
           <ModuleBtn
             name="Vouchers"
-            url="/dashboard/voucher"
+            url="/dashboard/vouchers"
             icon={<LiaFileInvoiceSolid />}
           />
         </div>

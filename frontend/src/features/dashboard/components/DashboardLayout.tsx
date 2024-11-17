@@ -3,7 +3,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import useCookie, { getCookie } from "react-use-cookie";
 
-import Spinner from "../../../components/Spinner";
+import ProgressBar from "../../../components/ProgressBar";
 import useUserStore from "../../../store/useUserStore";
 import Header from "./Header";
 
@@ -29,7 +29,7 @@ const DashboardLayout = () => {
           classNames={"fade"}
         >
           <div className="mt-4">
-            <Suspense fallback={<Spinner />}>
+            <Suspense fallback={<ProgressBar />}>
               <Outlet />
             </Suspense>
           </div>

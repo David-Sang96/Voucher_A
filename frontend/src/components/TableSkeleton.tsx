@@ -1,7 +1,12 @@
+import { useSearchParams } from "react-router-dom";
+
 const TableSkeleton = () => {
+  const [params] = useSearchParams();
+  const currentLimit = params.get("limit") ?? 5;
+
   return (
     <tbody>
-      {Array.from({ length: 6 }).map((_, index) => (
+      {Array.from({ length: Number(currentLimit) }).map((_, index) => (
         <tr
           key={index}
           className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"

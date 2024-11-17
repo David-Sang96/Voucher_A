@@ -1,6 +1,5 @@
 import { format } from "date-fns";
-import html2pdf from "html2pdf.js";
-import printJS from "print-js";
+import { handlePdf, handlePrint } from "../../../services/voucher";
 
 interface VoucherType {
   customer_name: string;
@@ -39,32 +38,6 @@ const VoucherCard = ({
   tax,
   total,
 }: VoucherType) => {
-  const handlePrint = () => {
-    printJS({
-      printable: "printArea",
-      type: "html",
-      css: [
-        "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css",
-      ], // External CSS link
-    });
-  };
-
-  const handlePdf = () => {
-    const element = document.getElementById("printArea");
-
-    html2pdf()
-      .from(element)
-      .set({
-        margin: 1,
-        paddingBottom: 2,
-        image: { type: "jpeg", quality: 0.98 },
-        filename: `invoice_${voucher_id}.pdf`,
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-      })
-      .save();
-  };
-
   return (
     <>
       <div className="w-[14.8cm] bg-white" id="printArea">
@@ -168,7 +141,7 @@ const VoucherCard = ({
         <button
           type="button"
           className="mb-2 me-2 rounded-lg bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white shadow-lg shadow-blue-500/50 hover:bg-gradient-to-br focus:outline-none focus:ring-4 focus:ring-blue-300 dark:shadow-lg dark:shadow-blue-800/80 dark:focus:ring-blue-800"
-          onClick={handlePdf}
+          onClick={() => handlePdf(voucher_id)}
         >
           Download PDF
         </button>
