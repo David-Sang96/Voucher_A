@@ -18,8 +18,9 @@ const VoucherHomePage = () => {
   const [fetchUrl, setFetchUrl] = useState<string | null>(
     `${import.meta.env.VITE_AUTH_API_URL}/vouchers${location.search}`,
   );
-  const [, setParams] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const { data, isLoading } = useSWR(fetchUrl, fetcher);
+  const [currentSearchValue] = useState(params.get("q"));
 
   const handleSearch = debounce((e) => {
     if (e.target.value) {
@@ -56,6 +57,7 @@ const VoucherHomePage = () => {
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-2.5 ps-10 text-sm text-gray-900 focus:border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
             placeholder="search voucher id..."
             onChange={handleSearch}
+            defaultValue={currentSearchValue || ""}
           />
         </div>
 

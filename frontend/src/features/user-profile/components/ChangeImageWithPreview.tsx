@@ -5,8 +5,8 @@ import { HiCamera } from "react-icons/hi";
 import { ImSpinner3 } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import useCookie, { getCookie } from "react-use-cookie";
-import Breadcrumb from "../components/Breadcrumb";
-import useUserStore from "../store/useUserStore";
+import Breadcrumb from "../../../components/Breadcrumb";
+import useUserStore from "../../../store/useUserStore";
 
 interface Value {
   profile_image: FileList;
@@ -20,7 +20,7 @@ const ChangeImage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Value>();
-  const [userCookie, setUserCookie] = useCookie("auth_user");
+  const [, setUserCookie] = useCookie("auth_user");
   const token = getCookie("token");
   const navigate = useNavigate();
   const { user, setUser } = useUserStore();

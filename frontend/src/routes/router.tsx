@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
+import NotFound from "../components/NotFound";
 import PublicLayout from "../features/public/components/PublicLayout";
-import NotFound from "../pages/NotFound";
 import { authRoute } from "./authRoute";
 import { dashBoardRoute } from "./dashboardRoute";
 import { publicRoute } from "./publicRoute";

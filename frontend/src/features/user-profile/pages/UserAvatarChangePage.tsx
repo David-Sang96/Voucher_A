@@ -2,13 +2,13 @@ import { useRef } from "react";
 import toast from "react-hot-toast";
 import { HiCamera } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
-import useCookie, { getCookie } from "react-use-cookie";
-import Breadcrumb from "../components/Breadcrumb";
-import useUserStore from "../store/useUserStore";
+import useCookie from "react-use-cookie";
+import Breadcrumb from "../../../components/Breadcrumb";
+import { updateAvatar } from "../../../services/userProfile";
+import useUserStore from "../../../store/useUserStore";
 
-const ChangeImage = () => {
-  const [userCookie, setUserCookie] = useCookie("auth_user");
-  const token = getCookie("token");
+const UserAvatarChangePage = () => {
+  const [, setUserCookie] = useCookie("auth_user");
   const navigate = useNavigate();
   const { user, setUser } = useUserStore();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -21,19 +21,7 @@ const ChangeImage = () => {
     }
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_AUTH_API_URL}/user-profile/change-profile-image`,
-        {
-          method: "post",
-          headers: {
-            // "content-type": "multipart/form-data",
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        },
-      );
-
+      const res = await updateAvatar(formData as FormData);
       const resData = await res.json();
       if (res.status === 200) {
         setUserCookie(JSON.stringify(resData.user));
@@ -91,4 +79,4 @@ const ChangeImage = () => {
   );
 };
 
-export default ChangeImage;
+export default UserAvatarChangePage;

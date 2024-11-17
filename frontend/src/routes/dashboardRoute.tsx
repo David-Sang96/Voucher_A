@@ -2,6 +2,7 @@
 import { lazy } from "react";
 import { productRoute } from "./productRoute";
 import { saleRoute } from "./saleRoute";
+import { userProfileRoute } from "./userProfileRoute";
 import { voucherRoute } from "./voucherRoute";
 
 const DashboardLayout = lazy(
@@ -23,6 +24,7 @@ export const dashBoardRoute = [
       ...productRoute,
       ...voucherRoute,
       ...saleRoute,
+      ...userProfileRoute,
     ],
   },
 ];
