@@ -30,7 +30,6 @@ const ProductTable = ({ products, isLoading, sortBy }: ProductTypes) => {
     setDeletingProductId(id);
     const res = await deleteProduct(id);
     const data = await res.json();
-    console.log(data);
 
     if (res.status === 200) {
       mutate(`${import.meta.env.VITE_AUTH_API_URL}/products`);

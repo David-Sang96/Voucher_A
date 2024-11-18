@@ -57,12 +57,13 @@ const VoucherTable = ({ vouchers, isLoading, sortBy }: VoucherType) => {
         <thead className="bg-gray-200 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">
-              <SortThBtn sortBy={sortBy} valOne="asc" valTwo="desc">
-                #
+              <SortThBtn
+                sortBy={sortBy}
+                valOne="Voucher_Id Asc"
+                valTwo="Voucher_Id Desc"
+              >
+                # ID
               </SortThBtn>
-            </th>
-            <th scope="col" className="px-6 py-3">
-              voucher id
             </th>
             <th scope="col" className="px-6 py-3">
               <SortThBtn
@@ -71,6 +72,24 @@ const VoucherTable = ({ vouchers, isLoading, sortBy }: VoucherType) => {
                 valTwo="CusName (Z To A)"
               >
                 customer name
+              </SortThBtn>
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <SortThBtn
+                sortBy={sortBy}
+                valOne="Tax (Low To High)"
+                valTwo="Tax (High To Low)"
+              >
+                Tax
+              </SortThBtn>
+            </th>
+            <th scope="col" className="px-6 py-3">
+              <SortThBtn
+                sortBy={sortBy}
+                valOne="Total (Low To High)"
+                valTwo="Total (High To Low)"
+              >
+                Total
               </SortThBtn>
             </th>
             <th scope="col" className="px-6 py-3">
@@ -86,7 +105,7 @@ const VoucherTable = ({ vouchers, isLoading, sortBy }: VoucherType) => {
         </thead>
         {vouchers?.length === 0 && (
           <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
-            <td className="px-6 py-4 text-center font-semibold" colSpan={5}>
+            <td className="px-6 py-4 text-center font-semibold" colSpan={7}>
               No Vouchers
             </td>
           </tr>

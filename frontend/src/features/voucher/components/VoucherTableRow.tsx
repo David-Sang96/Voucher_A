@@ -1,6 +1,7 @@
 import { format } from "date-fns";
+import Avatar from "react-avatar";
 import { ImSpinner3 } from "react-icons/im";
-import { LuArrowRightToLine } from "react-icons/lu";
+import { LuArrowRightToLine, LuCalendar } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 
@@ -35,14 +36,28 @@ const VoucherTableRow = ({
           className="border-b bg-white dark:border-gray-700 dark:bg-gray-800"
           key={voucher.id}
         >
-          <td className="px-6 py-4">{voucher.id}</td>
-          <td className="px-6 py-4">{voucher.voucher_id}</td>
-          <th
+          <td className="px-6 py-4 text-gray-900 dark:text-white">
+            {voucher.voucher_id}
+            <span className="flex items-center gap-1 text-xs">
+              <LuCalendar /> {voucher.sale_date}
+            </span>
+          </td>
+          <td
             scope="row"
-            className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+            className="flex items-center gap-3 whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
           >
+            <div>
+              <Avatar
+                name={voucher.customer_name}
+                round
+                size="30"
+                textSizeRatio={2}
+              />
+            </div>
             {voucher.customer_name}
-          </th>
+          </td>
+          <td className="px-6 py-4">{voucher.tax}</td>
+          <td className="px-6 py-4">{voucher.total}</td>
           <td className="px-6 py-4 text-center">{voucher.customer_email}</td>
           <td className="px-6 py-4 text-center">
             {format(voucher.sale_date, "d MMM yyyy")} -

@@ -20,6 +20,7 @@ const ProductHomePage = () => {
   const [params, setParams] = useSearchParams();
   const { isLoading, data } = useSWR(fetchUrl, fetcher);
   const [currentSearchValue] = useState(params.get("q"));
+  const limit = params.get("limit") ?? "5";
 
   const updateFetchUrl = (url: string | null) => {
     const paramsKeys = urlToParamsObject(url!);
@@ -42,7 +43,7 @@ const ProductHomePage = () => {
   }, 500);
 
   const sort = (val: string) =>
-    sortByCategory(val, "products", setFetchUrl, setParams);
+    sortByCategory(val, "products", limit, setFetchUrl, setParams);
 
   return (
     <section>

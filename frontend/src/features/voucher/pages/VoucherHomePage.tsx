@@ -21,6 +21,7 @@ const VoucherHomePage = () => {
   const [params, setParams] = useSearchParams();
   const { data, isLoading } = useSWR(fetchUrl, fetcher);
   const [currentSearchValue] = useState(params.get("q"));
+  const limit = params.get("limit") ?? "5";
 
   const handleSearch = debounce((e) => {
     if (e.target.value) {
@@ -41,7 +42,7 @@ const VoucherHomePage = () => {
   };
 
   const sort = (val: string) =>
-    sortByCategory(val, "vouchers", setFetchUrl, setParams);
+    sortByCategory(val, "vouchers", limit, setFetchUrl, setParams);
 
   return (
     <section>
